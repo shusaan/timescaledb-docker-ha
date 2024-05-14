@@ -230,7 +230,16 @@ RUN apt-get install -y python3-etcd python3-requests python3-pystache python3-ku
 
 # Barman cloud
 # Required for CloudNativePG compatibility
-RUN apt-get install -y python3-barman
+# Install barman-cloud
+RUN set -xe; \
+	apt-get install -y --no-install-recommends \
+		python3-pip \
+		python3-psycopg2 \
+		python3-setuptools \
+	; \
+	pip3 install %%PIP_OPTIONS%% --upgrade pip; \
+# TODO: Remove --no-deps once https://github.com/pypa/pip/issues/9644 is solved
+	pip3 install %%PIP_OPTIONS%% --no-deps -r requirements.txt;
 
 RUN apt-get install -y timescaledb-tools
 
